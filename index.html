@@ -87,7 +87,12 @@ h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; 
 
 .total{margin:0; font-size:var(--fs-xs); color:var(--ink-2)}
 .total b{font-stretch:75%; font-size:var(--fs-xl); font-weight:700; color:var(--ink); margin-right:4px; font-variant-numeric:tabular-nums}
-.figs{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:4px; overflow:hidden; margin-top:-8px}
+/* flex:none is load-bearing. `.side` is a flex column that may be taller than the viewport, and `.figs` is
+   the only item in it with `overflow:hidden`, which gives a flex item an automatic minimum size of ZERO. So
+   the panel's whole overflow was absorbed by shrinking the tiles instead of scrolling the panel: at 1366x768,
+   the commonest laptop size, the counts and the jump list rendered 0px tall and `.side` never became a scroll
+   box, because after the squeeze nothing overflowed it. tests/browser/panel-height.spec.ts holds it. */
+.figs{display:grid; flex:none; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:4px; overflow:hidden; margin-top:-8px}
 .fig{background:var(--paper); padding:10px 11px; display:flex; flex-direction:column; gap:1px; min-width:0; text-decoration:none; color:inherit}
 a.fig:hover{background:var(--paper-2)}
 .fig b{font-stretch:75%; font-size:var(--fs-2xl); font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
