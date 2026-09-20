@@ -1,3 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- The page is a bare static file on GitHub Pages: nothing else supplies a skeleton, so it supplies its own.
+     Without the doctype the browser renders in quirks mode, and without this viewport a phone lays the page
+     out at a ~980px virtual viewport, which is what kept the media blocks below from ever running. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
 <title>Zombieland Mod List</title>
 <meta name="description" content="Every mod the Zombieland RP Project Zomboid server runs, generated from the running server.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,600;75,700;100,400;100,500;100,600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -32,9 +41,16 @@
    USER-AGENT rule: any author `display:` here beats it, so a hidden .item (display:grid) stayed on screen and
    only the counter moved. This rule is what makes hiding work, for every element the script touches. */
 [hidden]{display:none!important}
-html{scroll-behavior:smooth}
+/* text-size-adjust: a phone may otherwise inflate long paragraphs and leave short ones alone, so two mod
+   descriptions of different lengths render at two different sizes. The page sets its own type. */
+html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%}
+/* viewport-fit=cover means the page owns the notch too: keep body copy out of it in landscape. */
 body{background:var(--ground); color:var(--ink); margin:0; font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-stretch:100%; font-size:15px; line-height:1.5}
+  font-stretch:100%; font-size:15px; line-height:1.5;
+  padding-left:env(safe-area-inset-left,0px); padding-right:env(safe-area-inset-right,0px)}
+/* Every line of copy on the page comes from a mod author, so any of it may be one unbroken token (a URL, a
+   run-together mod name). At 390px one of those is a horizontally scrolling page. */
+.lead,.desc,.note,.based,.subs li,.pill,.vgroup h3,.foot p{overflow-wrap:break-word}
 a{color:var(--accent-ink)}
 a:focus-visible,#q:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 
@@ -107,16 +123,19 @@ a.nm:hover{color:var(--accent-ink)}
 .vgroup h3{font-stretch:75%; font-weight:600; font-size:16px; margin:0; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-2)}
 .vgroup h3 b{font-family:"JetBrains Mono",monospace; font-weight:500; font-size:11.5px; color:var(--muted); margin-left:6px}
 .pills{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px}
-.pill{font-size:12.5px; padding:4px 10px; border:1px solid var(--rule-2); border-radius:100px; color:var(--ink-2); text-decoration:none; background:var(--paper)}
+.pill{font-size:12.5px; padding:4px 10px; border:1px solid var(--rule-2); border-radius:100px; color:var(--ink-2); text-decoration:none; background:var(--paper); max-width:100%}
 a.pill:hover{border-color:var(--accent); color:var(--accent-ink)}
 .pill i{font-style:normal; color:var(--muted); margin-left:5px; font-size:11px}
 
 .foot{margin-top:28px; padding-top:14px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--muted); max-width:72ch}
 .foot p{margin:0 0 8px}
 
+/* The side panel becomes a top block. `overflow:visible` is load-bearing: the desktop panel is its own
+   scroll box, and a sticky element inside a scroll box that never scrolls never sticks, so the search bar
+   below would simply scroll away. */
 @media (max-width:900px){
   .wrap{grid-template-columns:1fr}
-  .side{position:static; max-height:none; border-right:0; border-bottom:1px solid var(--rule); padding:26px 16px 18px}
+  .side{position:static; max-height:none; overflow:visible; border-right:0; border-bottom:1px solid var(--rule); padding:26px 16px 18px}
   .main{padding:22px 16px 60px}
   .tools{position:sticky; top:env(safe-area-inset-top,0px); z-index:20; background:var(--ground); padding-block:8px; margin:-8px -16px 0; padding-inline:16px}
   .figs{grid-template-columns:repeat(3,1fr)}
@@ -124,10 +143,19 @@ a.pill:hover{border-color:var(--accent); color:var(--accent-ink)}
 }
 @media (max-width:620px){
   .item{grid-template-columns:1fr; gap:2px}
-  .desc{max-width:none}
+  /* `#s-ours .desc` and `.item.fix .desc` outrank a bare `.desc` whatever the order, so name them here. */
+  .desc,#s-ours .desc,.item.fix .desc{max-width:none}
+  /* Back to the two-column tile block the panel was drawn for: at 390px three columns leave each tile ~95px,
+     which breaks "Running on the server" over three lines and sets the whole row to that height. */
+  .figs{grid-template-columns:1fr 1fr}
+  .fig:last-child{grid-column:1 / -1}
+  /* Under 16px, iOS Safari zooms the whole page in when the field takes focus and does not zoom back out. */
+  #q{font-size:16px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
 </style>
+</head>
+<body>
 
 <div class="wrap">
   <aside class="side">
@@ -463,3 +491,6 @@ a.pill:hover{border-color:var(--accent); color:var(--accent-ink)}
   apply();
 })();
 </script>
+
+</body>
+</html>
