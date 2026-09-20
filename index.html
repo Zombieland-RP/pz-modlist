@@ -22,13 +22,18 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,600;75,700;100,400;100,500;100,600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Palette: a cold field-manual grey-green, the colour of the game's own UI, with one signal accent (the amber of
-   a hazard stripe) and one calm green reserved for what is ours. Both themes declared in full. */
+   a hazard stripe) and one calm green reserved for what is ours. Both themes declared in full.
+   Every colour is `oklch(L% C H)`: lightness is its own coordinate, so a contrast fix moves L and leaves hue
+   and chroma untouched - the greys stay one family and the two schemes stay siblings.
+   OKLCH's L is PERCEPTUAL lightness and is NOT the relative luminance the WCAG ratio is computed from, so no
+   L value may be assumed to pass. tests/browser/theme.spec.ts measures every pair off the painted pixels. */
 :root{
-  --ground:#eef1ec; --paper:#f7f8f5; --paper-2:#e3e8e0; --rule:#cdd4c9; --rule-2:#aeb8a9;
-  --ink:#1c211c; --ink-2:#4a544b; --muted:#71796f;
-  --accent:#b8651a; --accent-ink:#8a4a10; --accent-soft:#f6e6d2;
-  --ours:#2f6b4f; --ours-soft:#dcebe1; --jar:#5b4b7a; --jar-soft:#e6e0f0;
-  --shadow:0 1px 0 rgba(28,33,28,.06);
+  --ground:oklch(95.45% 0.0073 132.42); --paper:oklch(97.75% 0.0041 121.56); --paper-2:oklch(92.49% 0.0119 133.38);
+  --rule:oklch(86.14% 0.0168 133.84); --rule-2:oklch(62.94% 0.0237 134.98);
+  --ink:oklch(24.08% 0.0119 145.19); --ink-2:oklch(43.41% 0.0193 148.09); --muted:oklch(52.99% 0.0179 139.44);
+  --accent:oklch(59.11% 0.134 56.28); --accent-ink:oklch(47.79% 0.1088 56.2); --accent-soft:oklch(93.24% 0.0318 73.52);
+  --ours:oklch(47.94% 0.078 161.08); --ours-soft:oklch(92.61% 0.0208 156.8);
+  --jar:oklch(44.94% 0.0772 298.93); --jar-soft:oklch(91.61% 0.0224 302.92);
 }
 /* TYPE SCALE. Every font-size on this page names one of these steps and nothing declares a literal size:
    the page had nine body sizes, two of which (14px and 14.5px) were the same kind of text - a mod
@@ -42,19 +47,21 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#151816; --paper:#1c201d; --paper-2:#242a26; --rule:#313a33; --rule-2:#4a5549;
-    --ink:#e6eae3; --ink-2:#b5bdb2; --muted:#87917f;
-    --accent:#e29a4c; --accent-ink:#f0b26f; --accent-soft:#3a2a15;
-    --ours:#7fc19c; --ours-soft:#1e3328; --jar:#b8a4da; --jar-soft:#2a2438;
-    --shadow:none;
+    --ground:oklch(20.5% 0.0061 156.65); --paper:oklch(23.82% 0.0082 153.28); --paper-2:oklch(27.76% 0.0112 156.42);
+    --rule:oklch(33.76% 0.0171 151.99); --rule-2:oklch(52.19% 0.0239 142.88);
+    --ink:oklch(93.2% 0.0103 131.36); --ink-2:oklch(78.89% 0.0177 137.04); --muted:oklch(64.32% 0.0287 131.07);
+    --accent:oklch(74.29% 0.1273 65.67); --accent-ink:oklch(80.73% 0.1109 67.31); --accent-soft:oklch(29.83% 0.0411 72.66);
+    --ours:oklch(75.62% 0.0863 158.91); --ours-soft:oklch(29.94% 0.0337 160.6);
+    --jar:oklch(75.46% 0.0791 301.48); --jar-soft:oklch(27.63% 0.0371 297.7);
   }
 }
 :root[data-theme="dark"]{
-  --ground:#151816; --paper:#1c201d; --paper-2:#242a26; --rule:#313a33; --rule-2:#4a5549;
-  --ink:#e6eae3; --ink-2:#b5bdb2; --muted:#87917f;
-  --accent:#e29a4c; --accent-ink:#f0b26f; --accent-soft:#3a2a15;
-  --ours:#7fc19c; --ours-soft:#1e3328; --jar:#b8a4da; --jar-soft:#2a2438;
-  --shadow:none;
+  --ground:oklch(20.5% 0.0061 156.65); --paper:oklch(23.82% 0.0082 153.28); --paper-2:oklch(27.76% 0.0112 156.42);
+  --rule:oklch(33.76% 0.0171 151.99); --rule-2:oklch(52.19% 0.0239 142.88);
+  --ink:oklch(93.2% 0.0103 131.36); --ink-2:oklch(78.89% 0.0177 137.04); --muted:oklch(64.32% 0.0287 131.07);
+  --accent:oklch(74.29% 0.1273 65.67); --accent-ink:oklch(80.73% 0.1109 67.31); --accent-soft:oklch(29.83% 0.0411 72.66);
+  --ours:oklch(75.62% 0.0863 158.91); --ours-soft:oklch(29.94% 0.0337 160.6);
+  --jar:oklch(75.46% 0.0791 301.48); --jar-soft:oklch(27.63% 0.0371 297.7);
 }
 *{box-sizing:border-box}
 /* The search hides a row by setting its `hidden` attribute, and the browser's own [hidden]{display:none} is a
@@ -73,6 +80,9 @@ body{background:var(--ground); color:var(--ink); margin:0; font-family:"Archivo"
 .lead,.desc,.note,.based,.pill,.vgroup h3,.foot p{overflow-wrap:break-word}
 a{color:var(--accent-ink)}
 a:focus-visible,#q:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+/* A label that only a screen reader reads. Not display:none and not hidden: either would take it out of the
+   accessibility tree, which is the one place it is for. */
+.vh{position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap}
 
 /* Frame: a sticky side panel that IS the table of contents, the list beside it. */
 .wrap{display:grid; grid-template-columns:280px minmax(0,1fr); max-width:1240px; margin:0 auto; min-height:100vh}
@@ -196,10 +206,14 @@ a.pill:hover{border-color:var(--accent); color:var(--accent-ink)}
       <a class="fig" href="#s-veh"><b>93</b><span>Vehicles</span></a>
     </nav>
 
-    <div class="tools">
+    <!-- <search> is the landmark: the page's only interaction is this box, and without it a screen reader
+         reader has no way to jump to it. The label is real and visually hidden rather than an aria-label,
+         and #hits is a live region because the only feedback the page gives is that line changing. -->
+    <search class="tools">
+      <label class="vh" for="q">Search the mod list</label>
       <input id="q" type="search" placeholder="Search by mod, author or what it does&hellip;" autocomplete="off" spellcheck="false">
-      <p id="hits"></p>
-    </div>
+      <p id="hits" role="status" aria-live="polite"></p>
+    </search>
 
     <p class="note"><strong>You subscribe to nothing.</strong> Connect with the details in the server-info channel; the game downloads the server&#x27;s pack from the Workshop on connect and enables the right mods. Let that download finish the first time.</p>
 <p class="note"><strong>Do not install any mod the pack contains on your own, from the Workshop or as a local copy:</strong> the server checks every client&#x27;s mods on connect and refuses a second copy until it is removed.</p>
