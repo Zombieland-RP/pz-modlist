@@ -28,6 +28,10 @@
   --shadow:none;
 }
 *{box-sizing:border-box}
+/* The search hides a row by setting its `hidden` attribute, and the browser's own [hidden]{display:none} is a
+   USER-AGENT rule: any author `display:` here beats it, so a hidden .item (display:grid) stayed on screen and
+   only the counter moved. This rule is what makes hiding work, for every element the script touches. */
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{background:var(--ground); color:var(--ink); margin:0; font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-stretch:100%; font-size:15px; line-height:1.5}
