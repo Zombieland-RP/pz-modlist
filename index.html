@@ -20,6 +20,16 @@
   --ours:#2f6b4f; --ours-soft:#dcebe1; --jar:#5b4b7a; --jar-soft:#e6e0f0;
   --shadow:0 1px 0 rgba(28,33,28,.06);
 }
+/* TYPE SCALE. Every font-size on this page names one of these steps and nothing declares a literal size:
+   the page had nine body sizes, two of which (14px and 14.5px) were the same kind of text - a mod
+   description and a server-fix description - at sizes no reader could tell apart on purpose. Six body
+   steps, four display steps. MEASURE is how wide a paragraph may get: one value for the description
+   column, one for the supporting copy that is not a row. */
+:root{
+  --fs-3xs:11px; --fs-2xs:12.5px; --fs-xs:13px; --fs-sm:14px; --fs-md:15px; --fs-lg:16px;
+  --fs-xl:22px; --fs-2xl:24px; --fs-3xl:26px; --fs-4xl:40px;
+  --measure-body:76ch; --measure-note:70ch;
+}
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --ground:#151816; --paper:#1c201d; --paper-2:#242a26; --rule:#313a33; --rule-2:#4a5549;
@@ -46,7 +56,7 @@
 html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; text-size-adjust:100%}
 /* viewport-fit=cover means the page owns the notch too: keep body copy out of it in landscape. */
 body{background:var(--ground); color:var(--ink); margin:0; font-family:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-stretch:100%; font-size:15px; line-height:1.5;
+  font-stretch:100%; font-size:var(--fs-md); line-height:1.5;
   padding-left:env(safe-area-inset-left,0px); padding-right:env(safe-area-inset-right,0px)}
 /* Every line of copy on the page comes from a mod author, so any of it may be one unbroken token (a URL, a
    run-together mod name). At 390px one of those is a horizontally scrolling page. */
@@ -60,74 +70,74 @@ a:focus-visible,#q:focus-visible{outline:2px solid var(--accent); outline-offset
   padding:32px 22px 28px 18px; border-right:1px solid var(--rule); display:flex; flex-direction:column; gap:20px}
 .main{padding:32px 34px 80px 34px; min-width:0}
 
-.brand{font-stretch:75%; font-weight:700; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent-ink); margin:0}
-h1{font-stretch:75%; font-weight:700; font-size:40px; line-height:.98; margin:6px 0 0; text-wrap:balance; letter-spacing:-.01em}
-.stamp{font-family:"JetBrains Mono",monospace; font-size:11.5px; color:var(--muted); margin:10px 0 0; line-height:1.5}
+.brand{font-stretch:75%; font-weight:700; font-size:var(--fs-xs); letter-spacing:.14em; text-transform:uppercase; color:var(--accent-ink); margin:0}
+h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; margin:6px 0 0; text-wrap:balance; letter-spacing:-.01em}
+.stamp{font-family:"JetBrains Mono",monospace; font-size:var(--fs-3xs); color:var(--muted); margin:10px 0 0; line-height:1.5}
 .stamp b{color:var(--ink-2); font-weight:500}
 
-.total{margin:0; font-size:13px; color:var(--ink-2)}
-.total b{font-stretch:75%; font-size:22px; font-weight:700; color:var(--ink); margin-right:4px; font-variant-numeric:tabular-nums}
+.total{margin:0; font-size:var(--fs-xs); color:var(--ink-2)}
+.total b{font-stretch:75%; font-size:var(--fs-xl); font-weight:700; color:var(--ink); margin-right:4px; font-variant-numeric:tabular-nums}
 .figs{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--rule); border:1px solid var(--rule); border-radius:4px; overflow:hidden; margin-top:-8px}
 .fig{background:var(--paper); padding:10px 11px; display:flex; flex-direction:column; gap:1px; min-width:0; text-decoration:none; color:inherit}
 a.fig:hover{background:var(--paper-2)}
-.fig b{font-stretch:75%; font-size:24px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
-.fig span{font-stretch:75%; text-transform:uppercase; letter-spacing:.09em; font-size:11px; font-weight:600; color:var(--muted)}
+.fig b{font-stretch:75%; font-size:var(--fs-2xl); font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
+.fig span{font-stretch:75%; text-transform:uppercase; letter-spacing:.09em; font-size:var(--fs-3xs); font-weight:600; color:var(--muted)}
 .fig.f-ours b{color:var(--ours)} .fig.f-jar b{color:var(--jar)}
 /* Five tiles in two columns: the last takes the whole row rather than sitting beside an empty cell. */
 .fig:last-child{grid-column:1 / -1}
 
-#q{width:100%; font:inherit; font-size:14px; padding:10px 12px; border:1px solid var(--rule-2); border-radius:4px;
+#q{width:100%; font:inherit; font-size:var(--fs-sm); padding:10px 12px; border:1px solid var(--rule-2); border-radius:4px;
   background:var(--paper); color:var(--ink)}
 #q::placeholder{color:var(--muted)}
-#hits{font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--muted); margin:7px 0 0; min-height:1.4em}
+#hits{font-family:"JetBrains Mono",monospace; font-size:var(--fs-3xs); color:var(--muted); margin:7px 0 0; min-height:1.4em}
 
-.note{font-size:12.5px; color:var(--ink-2); margin:0; line-height:1.5}
+.note{font-size:var(--fs-2xs); color:var(--ink-2); margin:0; line-height:1.5}
 .note strong{color:var(--ink)}
 .side .note+.note{margin-top:-10px}
 
 /* Sections */
 .sec{padding-top:8px; margin-bottom:44px; scroll-margin-top:16px}
-.sec h2{font-stretch:75%; font-weight:700; font-size:26px; margin:0; letter-spacing:-.005em; text-wrap:balance}
+.sec h2{font-stretch:75%; font-weight:700; font-size:var(--fs-3xl); margin:0; letter-spacing:-.005em; text-wrap:balance}
 .sec>h2::before{content:""; display:block; width:38px; height:4px; background:var(--accent); margin-bottom:10px; border-radius:2px}
 #s-ours>h2::before{background:var(--ours)} #s-patch>h2::before{background:var(--jar)}
-.lead{color:var(--ink-2); font-size:14px; margin:8px 0 14px; max-width:70ch}
+.lead{color:var(--ink-2); font-size:var(--fs-sm); margin:8px 0 14px; max-width:var(--measure-note)}
 
 .item{display:grid; grid-template-columns:minmax(180px,250px) minmax(0,1fr); gap:4px 22px; padding:11px 0; border-top:1px solid var(--rule); align-items:baseline}
 .item:last-child{border-bottom:1px solid var(--rule)}
 .item .l,.item .r{min-width:0}
-.nm{display:block; font-weight:600; font-size:15px; overflow-wrap:anywhere; color:inherit; text-decoration:none}
+.nm{display:block; font-weight:600; font-size:var(--fs-md); overflow-wrap:anywhere; color:inherit; text-decoration:none}
 a.nm:hover{color:var(--accent-ink)}
-.meta{display:block; margin-top:3px; font-family:"JetBrains Mono",monospace; font-size:11px; line-height:1.45; color:var(--muted); overflow-wrap:anywhere}
-.desc{margin:0; color:var(--ink-2); font-size:14px; max-width:68ch}
-#s-ours .desc{color:var(--ink); max-width:76ch}
-.wl{font-stretch:75%; text-transform:uppercase; letter-spacing:.06em; font-size:11.5px; text-decoration:none; white-space:nowrap; margin-left:6px; font-weight:600}
+.meta{display:block; margin-top:3px; font-family:"JetBrains Mono",monospace; font-size:var(--fs-3xs); line-height:1.45; color:var(--muted); overflow-wrap:anywhere}
+.desc{margin:0; color:var(--ink-2); font-size:var(--fs-sm); max-width:var(--measure-body)}
+#s-ours .desc{color:var(--ink); max-width:var(--measure-body)}
+.wl{font-stretch:75%; text-transform:uppercase; letter-spacing:.06em; font-size:var(--fs-3xs); text-decoration:none; white-space:nowrap; margin-left:6px; font-weight:600}
 .wl:hover{text-decoration:underline}
-.based{margin:5px 0 0; font-size:12.5px; color:var(--muted)}
+.based{margin:5px 0 0; font-size:var(--fs-2xs); color:var(--muted)}
 .based b{font-weight:600; color:var(--ink-2)}
 .item:target,.pill:target{background:var(--accent-soft); box-shadow:0 0 0 6px var(--accent-soft); border-radius:3px}
 
 /* Server-side fixes lead with what they do */
 .item.fix{grid-template-columns:1fr; gap:2px}
-.item.fix .desc{color:var(--ink); max-width:80ch; font-size:14.5px}
+.item.fix .desc{color:var(--ink); max-width:var(--measure-body); font-size:var(--fs-sm)}
 .item.fix .meta{margin-top:1px}
-.item.fix .meta .nm{display:inline; font-weight:500; font-size:11px; color:var(--jar)}
+.item.fix .meta .nm{display:inline; font-weight:500; font-size:var(--fs-3xs); color:var(--jar)}
 /* A merged jar: its subsystems listed under one heading; a client jar's subsystems under the mod that carries it */
 .vgroup.bundle{display:block}
 .vgroup.bundle .item.fix{margin-left:10px}
-.subs{list-style:none; margin:6px 0 0; padding:0; font-size:13.5px}
+.subs{list-style:none; margin:6px 0 0; padding:0; font-size:var(--fs-xs)}
 .subs li{margin:2px 0}
 .subs b{font-weight:600; color:var(--jar)}
 
 /* Vehicles */
 .vgroup{margin-top:18px}
-.vgroup h3{font-stretch:75%; font-weight:600; font-size:16px; margin:0; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-2)}
-.vgroup h3 b{font-family:"JetBrains Mono",monospace; font-weight:500; font-size:11.5px; color:var(--muted); margin-left:6px}
+.vgroup h3{font-stretch:75%; font-weight:600; font-size:var(--fs-lg); margin:0; text-transform:uppercase; letter-spacing:.07em; color:var(--ink-2)}
+.vgroup h3 b{font-family:"JetBrains Mono",monospace; font-weight:500; font-size:var(--fs-3xs); color:var(--muted); margin-left:6px}
 .pills{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px}
-.pill{font-size:12.5px; padding:4px 10px; border:1px solid var(--rule-2); border-radius:100px; color:var(--ink-2); text-decoration:none; background:var(--paper); max-width:100%}
+.pill{font-size:var(--fs-2xs); padding:4px 10px; border:1px solid var(--rule-2); border-radius:100px; color:var(--ink-2); text-decoration:none; background:var(--paper); max-width:100%}
 a.pill:hover{border-color:var(--accent); color:var(--accent-ink)}
-.pill i{font-style:normal; color:var(--muted); margin-left:5px; font-size:11px}
+.pill i{font-style:normal; color:var(--muted); margin-left:5px; font-size:var(--fs-3xs)}
 
-.foot{margin-top:28px; padding-top:14px; border-top:1px solid var(--rule); font-size:12.5px; color:var(--muted); max-width:72ch}
+.foot{margin-top:28px; padding-top:14px; border-top:1px solid var(--rule); font-size:var(--fs-2xs); color:var(--muted); max-width:var(--measure-note)}
 .foot p{margin:0 0 8px}
 
 /* The side panel becomes a top block. `overflow:visible` is load-bearing: the desktop panel is its own
@@ -150,7 +160,7 @@ a.pill:hover{border-color:var(--accent); color:var(--accent-ink)}
   .figs{grid-template-columns:1fr 1fr}
   .fig:last-child{grid-column:1 / -1}
   /* Under 16px, iOS Safari zooms the whole page in when the field takes focus and does not zoom back out. */
-  #q{font-size:16px}
+  #q{font-size:var(--fs-lg)}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important; transition:none!important}}
 </style>
