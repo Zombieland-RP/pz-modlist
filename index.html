@@ -103,10 +103,16 @@ h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; 
     margin:calc(-1 * var(--sp-2xs)) calc(-1 * var(--sp-sm)) 0;
   }
 }
-#q{width:100%; font:inherit; font-size:var(--fs-sm); padding:var(--sp-xs); border:var(--hairline) solid var(--rule-2);
+.box{position:relative}
+#q{width:100%; font:inherit; font-size:var(--fs-sm); padding:var(--sp-xs); padding-right:var(--sp-lg); border:var(--hairline) solid var(--rule-2);
   border-radius:var(--radius); background:var(--paper); color:var(--ink);
   &::placeholder{color:var(--muted)}
+  &::-webkit-search-cancel-button{-webkit-appearance:none; appearance:none}
   @media (max-width:38.75em){font-size:var(--fs-lg)}
+}
+#clear{position:absolute; right:var(--sp-3xs); top:50%; transform:translateY(-50%); border:0; background:none; font:inherit; font-size:var(--fs-xl); line-height:1; color:var(--muted); padding:var(--sp-3xs) var(--sp-2xs); border-radius:var(--radius); cursor:pointer;
+  &:hover{color:var(--ink)}
+  &:focus-visible{outline:var(--ring) solid var(--accent); outline-offset:var(--ring-offset)}
 }
 #hits{font-size:var(--fs-2xs); color:var(--muted); margin:0; min-height:1.4em}
 .nh{font-stretch:75%; font-weight:700; font-size:var(--fs-xs); letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0}
@@ -191,7 +197,10 @@ h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; 
 
         <search class="tools">
       <label class="vh" for="q">Search the mod list</label>
-      <input id="q" type="search" placeholder="Search" autocomplete="off" spellcheck="false">
+      <div class="box">
+        <input id="q" type="search" placeholder="Search" autocomplete="off" spellcheck="false">
+        <button id="clear" type="button" aria-label="Clear search" hidden>&times;</button>
+      </div>
       <p id="hits" role="status" aria-live="polite"></p>
     </search>
 
@@ -482,7 +491,7 @@ h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; 
 
 <script>
 (function(){
-  var q=document.getElementById('q'), hits=document.getElementById('hits');
+  var q=document.getElementById('q'), hits=document.getElementById('hits'), clear=document.getElementById('clear');
   var items=[].slice.call(document.querySelectorAll('.item'));
   var pills=[].slice.call(document.querySelectorAll('.pill'));
   var secs=[].slice.call(document.querySelectorAll('.sec'));
@@ -498,6 +507,7 @@ h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; 
   }
   function apply(){
     var words=q.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    clear.hidden=!q.value;
     if(!words.length){
       items.forEach(function(n){n.hidden=false;});
       pills.forEach(function(n){n.hidden=false;});
@@ -524,7 +534,10 @@ h1{font-stretch:75%; font-weight:700; font-size:var(--fs-4xl); line-height:.98; 
     var t=q.value.trim(), url=location.pathname+(t?'?q='+encodeURIComponent(t):'')+location.hash;
     if(history.replaceState)history.replaceState(null,'',url);
   }
+  function reset(){q.value=''; apply(); setUrl(); q.focus();}
   q.addEventListener('input',function(){apply(); setUrl();});
+  clear.addEventListener('click',reset);
+  q.addEventListener('keydown',function(e){if(e.key==='Escape'&&q.value){e.preventDefault(); reset();}});
   document.addEventListener('click',function(e){
     var a=e.target&&e.target.closest?e.target.closest('a[data-q]'):null;
     if(!a)return;
